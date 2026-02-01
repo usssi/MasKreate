@@ -18,8 +18,9 @@ public class ObjectSelector : MonoBehaviour
     public float vLineLength = 2000f;
     public float hLineLength = 2000f;
     public Color guideLineColor = new Color(0, 0.5f, 1f, 1f);
+    public RectTransform snappingBackground; // Reference for custom center/size
 
-    private bool isDragging;
+    public bool IsDragging { get; private set; }
     private Transform dragTarget;
     private Vector3 dragOffset;
 
@@ -27,7 +28,6 @@ public class ObjectSelector : MonoBehaviour
     {
         if (Mouse.current == null) return;
 
-        // Mouse Down: Try to select and start drag
         // Mouse Down: Try to select and start drag
         // Check if we are interacting with the gizmo handles first
         if (selectionOutline != null && selectionOutline.IsInteracting) return;
@@ -42,7 +42,7 @@ public class ObjectSelector : MonoBehaviour
             TryDeleteObject();
         }
 
-        if (isDragging && dragTarget != null)
+        if (IsDragging && dragTarget != null)
         {
             Vector3 currentMousePos = GetMouseWorldPosition(dragTarget);
             Vector3 targetPos = new Vector3(currentMousePos.x + dragOffset.x, currentMousePos.y + dragOffset.y, dragTarget.position.z);
@@ -51,48 +51,58 @@ public class ObjectSelector : MonoBehaviour
             if (lockXAxis) targetPos.x = dragTarget.position.x;
             if (lockYAxis) targetPos.y = dragTarget.position.y;
 
-            // Snapping to Center (0,0) - Using Anchored Position for better accuracy on RectTransforms
+            // Snapping logic
             bool snappedX = false;
             bool snappedY = false;
             RectTransform rt = dragTarget as RectTransform;
 
+            float currentHLength = hLineLength;
+            float currentVLength = vLineLength;
+            Vector3? guideCenter = null;
+
             if (rt != null)
             {
-                // Convert world targetPos to local anchored position
-                Vector2 anchoredPos = rt.anchoredPosition;
+                // Determine snap center
+                Vector3 worldSnapCenter = (snappingBackground != null) ? snappingBackground.position : (rt.parent != null ? rt.parent.position : Vector3.zero);
                 
-                // We use the intended position to check for snaps
-                // Note: dragOffset is in world space, so we calculate intended world, then convert
-                dragTarget.position = targetPos; // Temporarily move to see where we'd be
-                Vector2 localIntendedPos = rt.anchoredPosition;
-
-                if (Mathf.Abs(localIntendedPos.x) < snapThreshold)
+                if (snappingBackground != null)
                 {
-                    localIntendedPos.x = 0;
+                    currentHLength = snappingBackground.rect.width;
+                    currentVLength = snappingBackground.rect.height;
+                    guideCenter = snappingBackground.position;
+                }
+
+                // Temporary move to check snap
+                dragTarget.position = targetPos;
+                
+                // Calculate local offset from the worldSnapCenter
+                Vector3 worldOffset = dragTarget.position - worldSnapCenter;
+                
+                // Convert world offset to local units (relative to parent scale)
+                Vector3 localOffset = rt.parent != null ? rt.parent.InverseTransformVector(worldOffset) : worldOffset;
+
+                // We check if the local anchored position would be close to our target (usually 0,0 relative to snap center)
+                // If snappingBackground is used, we snap to its center
+                if (Mathf.Abs(localOffset.x) < (snapThreshold / 100f)) // Threshold depends on scale, but let's approximate
+                {
+                    // Since localOffset is world-space vector converted to local, 
+                    // we can just adjust the world position to align with snap center
+                    targetPos.x = worldSnapCenter.x;
                     snappedX = true;
                 }
-                if (Mathf.Abs(localIntendedPos.y) < snapThreshold)
+                if (Mathf.Abs(localOffset.y) < (snapThreshold / 100f))
                 {
-                    localIntendedPos.y = 0;
+                    targetPos.y = worldSnapCenter.y;
                     snappedY = true;
                 }
 
-                if (snappedX || snappedY)
-                {
-                    rt.anchoredPosition = localIntendedPos;
-                    targetPos = dragTarget.position; // Sync back
-                    Debug.Log($"[CenterSnap] SNAPPED! x:{snappedX}, y:{snappedY}. AnchoredPos: {rt.anchoredPosition}");
-                }
-                else
-                {
-                    Debug.Log($"[CenterSnap] Dragging. AnchoredPos: {localIntendedPos}");
-                }
+                dragTarget.position = targetPos; // Sync back
             }
 
             // Show Guide Lines
             if (selectionOutline != null)
             {
-                selectionOutline.ShowGuides(snappedY, snappedX, guideLineThickness, hLineLength, vLineLength, guideLineColor);
+                selectionOutline.ShowGuides(snappedY, snappedX, guideLineThickness, currentHLength, currentVLength, guideLineColor, guideCenter);
             }
 
             // Direct Movement (No Smoothing)
@@ -101,7 +111,7 @@ public class ObjectSelector : MonoBehaviour
         else
         {
             // Ensure guides are hidden when not dragging or target is null
-            if (selectionOutline != null && !isDragging)
+            if (selectionOutline != null && !IsDragging)
             {
                 selectionOutline.ShowGuides(false, false, guideLineThickness, hLineLength, vLineLength, guideLineColor);
             }
@@ -110,7 +120,7 @@ public class ObjectSelector : MonoBehaviour
         // Mouse Up: Stop dragging
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
-            isDragging = false;
+            IsDragging = false;
             dragTarget = null;
             if (selectionOutline != null)
             {
@@ -167,7 +177,7 @@ public class ObjectSelector : MonoBehaviour
                 }
                 
                 // Start Drag
-                isDragging = true;
+                IsDragging = true;
                 dragTarget = transformer.transform;
                 dragOffset = dragTarget.position - GetMouseWorldPosition(dragTarget);
                 

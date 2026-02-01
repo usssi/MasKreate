@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2a1e3034f9761408a926acb7310668, type: 3}
   m_Name: Cabeza 3
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
-  visual: {fileID: 21300000, guid: ad235c7b8dc39dd4eb085787e1fd3a29, type: 3}
+  visual: {fileID: 21300000, guid: f480b7b91682b3243b12428a37d71b4f, type: 3}
   itemName: Cabeza3

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2a1e3034f9761408a926acb7310668, type: 3}
   m_Name: misc 5
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
-  visual: {fileID: 21300000, guid: 7848f46e6805905498ef2a27d5aaf5ce, type: 3}
+  visual: {fileID: 21300000, guid: 0a490f69e34b20b4185313ff2b9e6bde, type: 3}
   itemName: misc

@@ -16,6 +16,9 @@ public class SelectionOutline : MonoBehaviour
     public Texture2D cursorResizeD_TRBL; // Top-Right to Bottom-Left
     public Texture2D cursorRotate;
     public Texture2D cursorMove;
+    public Texture2D cursorGrabOpen;  // Open hand
+    public Texture2D cursorGrabClosed; // Closed hand (grabbing)
+    public Sprite rotateIcon; // Icon for the rotation handle
     public Vector2 cursorHotspot = new Vector2(16, 16); // Center of 32x32 cursor
 
     [Header("Internal References")]
@@ -30,8 +33,10 @@ public class SelectionOutline : MonoBehaviour
     [SerializeField] private Image rotateHandle;
     [SerializeField] private Image hGuideLine;
     [SerializeField] private Image vGuideLine;
+    [SerializeField] private Image bodyHandle; // Invisible catcher for the whole area
     
     public SpriteEditorUI editorUI;
+    public ObjectSelector objectSelector; // To check drag state
 
     private RectTransform target;
     private RectTransform myRectTransform;
@@ -43,6 +48,8 @@ public class SelectionOutline : MonoBehaviour
     private Vector2 initialSize;
     private float initialAngle;
     private float initialZRotation;
+    private GizmoHandle hoveredHandle; // Track currently hovered handle
+    private GizmoHandle activeHandle;  // Track handle currently being dragged/clicked
 
     private void Awake()
     {
@@ -57,12 +64,40 @@ public class SelectionOutline : MonoBehaviour
         if (target != null)
         {
             FollowTarget();
+            RefreshCursor();
         }
         else
         {
              // Hide if no target
              SetAlpha(0);
         }
+    }
+
+    private void RefreshCursor()
+    {
+        if (target == null) return;
+
+        Texture2D nextCursor = null;
+
+        // Priority 1: Persistent interaction (Scaling, Rotating, or Grabbing)
+        if (activeHandle != null)
+        {
+            if (activeHandle.type == GizmoHandleType.Body)
+            {
+                nextCursor = cursorGrabClosed;
+            }
+            else
+            {
+                nextCursor = GetAdaptiveCursor(activeHandle);
+            }
+        }
+        // Priority 2: Hovering (showing what *would* happen if clicked)
+        else if (hoveredHandle != null)
+        {
+            nextCursor = GetAdaptiveCursor(hoveredHandle);
+        }
+
+        Cursor.SetCursor(nextCursor, cursorHotspot, CursorMode.Auto);
     }
 
     public void SetTarget(RectTransform t)
@@ -118,6 +153,20 @@ public class SelectionOutline : MonoBehaviour
             return img;
         }
 
+        // Body Hand Catcher (Must be first to be behind other handles)
+        if(!bodyHandle) 
+        { 
+            bodyHandle = CreateImage("BodyHandle", Color.clear); 
+            bodyHandle.GetComponent<GizmoHandle>().type = GizmoHandleType.Body; 
+            bodyHandle.transform.SetAsFirstSibling(); 
+            // Stretch to fill
+            RectTransform brt = bodyHandle.rectTransform;
+            brt.anchorMin = Vector2.zero;
+            brt.anchorMax = Vector2.one;
+            brt.sizeDelta = Vector2.zero;
+            brt.anchoredPosition = Vector2.zero;
+        }
+
         // Lines
         if(!topLine) { topLine = CreateImage("TopLine", color); topLine.GetComponent<GizmoHandle>().type = GizmoHandleType.Top; }
         if(!bottomLine) { bottomLine = CreateImage("BottomLine", color); bottomLine.GetComponent<GizmoHandle>().type = GizmoHandleType.Bottom; }
@@ -132,7 +181,12 @@ public class SelectionOutline : MonoBehaviour
         if(!brCorner) { brCorner = CreateImage("BRCorner", cornerColor); brCorner.GetComponent<GizmoHandle>().type = GizmoHandleType.CornerBR; }
 
         // Rotation Handle - Bottom Left circle
-        if(!rotateHandle) { rotateHandle = CreateImage("RotateHandle", Color.yellow); rotateHandle.GetComponent<GizmoHandle>().type = GizmoHandleType.Rotate; }
+        if(!rotateHandle) 
+        { 
+            rotateHandle = CreateImage("RotateHandle", rotateIcon != null ? Color.white : Color.yellow); 
+            if (rotateIcon != null) rotateHandle.sprite = rotateIcon;
+            rotateHandle.GetComponent<GizmoHandle>().type = GizmoHandleType.Rotate; 
+        }
 
         // Guide Lines (Blue)
         if (!hGuideLine) 
@@ -225,7 +279,7 @@ public class SelectionOutline : MonoBehaviour
         }
     }
 
-    public void ShowGuides(bool horizontal, bool vertical, float thickness, float hLength, float vLength, Color guideColor)
+    public void ShowGuides(bool horizontal, bool vertical, float thickness, float hLength, float vLength, Color guideColor, Vector3? centerPosition = null)
     {
         if (hGuideLine)
         {
@@ -234,7 +288,8 @@ public class SelectionOutline : MonoBehaviour
             {
                 hGuideLine.color = guideColor;
                 hGuideLine.rectTransform.sizeDelta = new Vector2(hLength, thickness);
-                hGuideLine.rectTransform.anchoredPosition = Vector2.zero;
+                if (centerPosition.HasValue) hGuideLine.transform.position = centerPosition.Value;
+                else hGuideLine.rectTransform.anchoredPosition = Vector2.zero;
                 hGuideLine.rectTransform.rotation = Quaternion.identity;
             }
         }
@@ -245,7 +300,8 @@ public class SelectionOutline : MonoBehaviour
             {
                 vGuideLine.color = guideColor;
                 vGuideLine.rectTransform.sizeDelta = new Vector2(thickness, vLength);
-                vGuideLine.rectTransform.anchoredPosition = Vector2.zero;
+                if (centerPosition.HasValue) vGuideLine.transform.position = centerPosition.Value;
+                else vGuideLine.rectTransform.anchoredPosition = Vector2.zero;
                 vGuideLine.rectTransform.rotation = Quaternion.identity;
             }
         }
@@ -258,10 +314,8 @@ public class SelectionOutline : MonoBehaviour
     // Interaction Interface for GizmoHandles
     public void OnHandleHoverEnter(GizmoHandle handle)
     {
-        if (IsInteracting || target == null) return;
-        
-        Texture2D cursor = GetAdaptiveCursor(handle);
-        Cursor.SetCursor(cursor, cursorHotspot, CursorMode.Auto);
+        if (target == null) return;
+        hoveredHandle = handle;
     }
 
     private Texture2D GetAdaptiveCursor(GizmoHandle handle)
@@ -269,7 +323,7 @@ public class SelectionOutline : MonoBehaviour
         switch (handle.type)
         {
             case GizmoHandleType.Rotate: return cursorRotate;
-            case GizmoHandleType.Body: return cursorMove;
+            case GizmoHandleType.Body: return cursorGrabOpen;
         }
 
         // Calculate base angle for the handle
@@ -302,13 +356,21 @@ public class SelectionOutline : MonoBehaviour
 
     public void OnHandleHoverExit(GizmoHandle handle)
     {
-        if (IsInteracting) return;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        if (hoveredHandle == handle)
+        {
+            hoveredHandle = null;
+        }
     }
 
     public void OnHandleDown(GizmoHandle handle, PointerEventData eventData)
     {
-        IsInteracting = true;
+        activeHandle = handle;
+        
+        if (handle.type != GizmoHandleType.Body)
+        {
+            IsInteracting = true;
+        }
+        
         initialMousePos = eventData.position;
         if (target != null)
         {
@@ -327,7 +389,7 @@ public class SelectionOutline : MonoBehaviour
     public void OnHandleUp(GizmoHandle handle, PointerEventData eventData)
     {
         IsInteracting = false;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        activeHandle = null;
     }
 
     public void OnHandleDrag(GizmoHandle handle, PointerEventData eventData)
