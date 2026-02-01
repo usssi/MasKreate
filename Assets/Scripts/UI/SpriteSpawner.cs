@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpriteSpawner : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class SpriteSpawner : MonoBehaviour
     public void SpawnSprite()
     {
         GameObject nuevoSprite = Instantiate(spritePrefab, canvas);
+        nuevoSprite.GetComponent<Image>().color = ColorManager.colorActual;
         
         // Initialize with data
         SpriteInitializer initializer = nuevoSprite.GetComponent<SpriteInitializer>();
