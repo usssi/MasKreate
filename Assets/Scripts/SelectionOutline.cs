@@ -8,6 +8,8 @@ public class SelectionOutline : MonoBehaviour
     public float thickness = 3f;
     public Color color = Color.magenta;
     public float margin = 0f;
+    public float rotateHandleSize = 15f;
+    public Vector2 rotateHandleOffset = new Vector2(-20, -20);
 
     [Header("Cursors")]
     public Texture2D cursorResizeH;
@@ -220,8 +222,8 @@ public class SelectionOutline : MonoBehaviour
 
         // Setup Rotation Handle (Bottom Left, distinct from resize corner)
         // Let's place it slightly outside BL corner
-        SetupCorner(rotateHandle.rectTransform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0.5f, 0.5f), new Vector2(15, 15));
-        rotateHandle.rectTransform.anchoredPosition = new Vector2(-20, -20);    
+        SetupCorner(rotateHandle.rectTransform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0.5f, 0.5f), new Vector2(rotateHandleSize, rotateHandleSize));
+        rotateHandle.rectTransform.anchoredPosition = rotateHandleOffset;    
     }
 
     private void SetupCorner(RectTransform rt, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 sizeDelta)
@@ -259,6 +261,12 @@ public class SelectionOutline : MonoBehaviour
         if (bottomLine) { bottomLine.color = color; bottomLine.rectTransform.sizeDelta = new Vector2(0, thickness); }
         if (leftLine) { leftLine.color = color; leftLine.rectTransform.sizeDelta = new Vector2(thickness, 0); }
         if (rightLine) { rightLine.color = color; rightLine.rectTransform.sizeDelta = new Vector2(thickness, 0); }
+        
+        if (rotateHandle)
+        {
+            rotateHandle.rectTransform.sizeDelta = new Vector2(rotateHandleSize, rotateHandleSize);
+            rotateHandle.rectTransform.anchoredPosition = rotateHandleOffset;
+        }
     }
     
     private void SetAlpha(float a)

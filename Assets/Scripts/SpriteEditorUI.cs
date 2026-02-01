@@ -66,6 +66,8 @@ public class SpriteEditorUI : MonoBehaviour
         float offset = ((totalWidth / currentTarget.baseWidth) - 1f) * 100f;
         float finalVal = RoundToStep(Mathf.Clamp(offset, minWidth, maxWidth), widthStep);
         
+        if (Mathf.Abs(currentTarget.width - finalVal) > 0.01f && AudioManager.Instance != null) AudioManager.Instance.PlayStepDimension();
+
         currentTarget.width = finalVal;
         if (widthValueText) widthValueText.text = finalVal.ToString("F0");
     }
@@ -78,6 +80,8 @@ public class SpriteEditorUI : MonoBehaviour
         float offset = ((totalHeight / currentTarget.baseHeight) - 1f) * 100f;
         float finalVal = RoundToStep(Mathf.Clamp(offset, minHeight, maxHeight), heightStep);
         
+        if (Mathf.Abs(currentTarget.height - finalVal) > 0.01f && AudioManager.Instance != null) AudioManager.Instance.PlayStepDimension();
+
         currentTarget.height = finalVal;
         if (heightValueText) heightValueText.text = finalVal.ToString("F0");
     }
@@ -86,6 +90,7 @@ public class SpriteEditorUI : MonoBehaviour
     {
         if (currentTarget == null) return;
         float finalVal = RoundToStep(Mathf.Clamp(totalScale, minScale, maxScale), scaleStep);
+        if (Mathf.Abs(currentTarget.scale - finalVal) > 0.01f && AudioManager.Instance != null) AudioManager.Instance.PlayStepScale();
         currentTarget.scale = finalVal;
         if (scaleValueText) scaleValueText.text = finalVal.ToString("F2");
     }
@@ -94,6 +99,7 @@ public class SpriteEditorUI : MonoBehaviour
     {
         if (currentTarget == null) return;
         float finalVal = RoundToStep(Mathf.Clamp(totalRotation, minRotation, maxRotation), rotationStep);
+        if (Mathf.Abs(currentTarget.zRotation - finalVal) > 0.01f && AudioManager.Instance != null) AudioManager.Instance.PlayStepRotation();
         currentTarget.zRotation = finalVal;
         if (rotationValueText) rotationValueText.text = finalVal.ToString("F0");
     }

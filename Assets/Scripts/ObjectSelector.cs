@@ -23,6 +23,9 @@ public class ObjectSelector : MonoBehaviour
     public bool IsDragging { get; private set; }
     private Transform dragTarget;
     private Vector3 dragOffset;
+    
+    private bool lastSnappedX = false;
+    private bool lastSnappedY = false;
 
     private void Update()
     {
@@ -105,6 +108,14 @@ public class ObjectSelector : MonoBehaviour
                 selectionOutline.ShowGuides(snappedY, snappedX, guideLineThickness, currentHLength, currentVLength, guideLineColor, guideCenter);
             }
 
+            // Play step sound on snap trigger
+            if ((snappedX && !lastSnappedX) || (snappedY && !lastSnappedY))
+            {
+                if (AudioManager.Instance != null) AudioManager.Instance.PlayStepMove();
+            }
+            lastSnappedX = snappedX;
+            lastSnappedY = snappedY;
+
             // Direct Movement (No Smoothing)
             dragTarget.position = targetPos;
         }
@@ -146,6 +157,23 @@ public class ObjectSelector : MonoBehaviour
         return worldPoint;
     }
 
+    public void SelectObject(SpriteTransformer transformer)
+    {
+        bool isNewSelection = (transformer != null && editorUI != null && editorUI.GetType().GetField("currentTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(editorUI) != transformer);
+        
+        if (editorUI != null) editorUI.SetTarget(transformer);
+        if (selectionOutline != null) 
+        {
+            selectionOutline.editorUI = editorUI;
+            selectionOutline.SetTarget(transformer != null ? transformer.GetComponent<RectTransform>() : null);
+        }
+
+        if (isNewSelection && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySelect();
+        }
+    }
+
     private void TrySelectObject()
     {
         // Use EventSystem to find UI elements under the mouse
@@ -169,12 +197,7 @@ public class ObjectSelector : MonoBehaviour
             if (transformer != null && transformer.isInteractable)
             {
                 Debug.Log($"[ObjectSelector] Selecting Target: {obj.name}");
-                if (editorUI != null) editorUI.SetTarget(transformer);
-                if (selectionOutline != null) 
-                {
-                    selectionOutline.editorUI = editorUI;
-                    selectionOutline.SetTarget(transformer.GetComponent<RectTransform>());
-                }
+                SelectObject(transformer);
                 
                 // Start Drag
                 IsDragging = true;
@@ -197,8 +220,7 @@ public class ObjectSelector : MonoBehaviour
 
         // Fallback: If we processed all hits and found neither a Target nor a UI Control...
         Debug.Log("[ObjectSelector] Clicked outside (No Target, No Control). Deselecting.");
-        if (editorUI != null) editorUI.SetTarget(null);
-        if (selectionOutline != null) selectionOutline.SetTarget(null);
+        SelectObject(null);
     }
 
     private void TryDeleteObject()
@@ -240,6 +262,8 @@ public class ObjectSelector : MonoBehaviour
                     // Clear selection 
                     if (editorUI != null) editorUI.SetTarget(null);
                     if (selectionOutline != null) selectionOutline.SetTarget(null);
+
+                    if (AudioManager.Instance != null) AudioManager.Instance.PlayDelete();
 
                     Destroy(obj);
                 }
