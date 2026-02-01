@@ -10,6 +10,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip clipStepScale;
     public AudioClip clipStepMove;
     public AudioClip clipStepDimension;
+    public AudioClip clipStartGame;
+    public AudioClip clipStartLevel;
+    public AudioClip clipEndGame;
 
     private AudioSource audioSource;
 
@@ -18,6 +21,7 @@ public class AudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false;
         }
@@ -55,5 +59,20 @@ public class AudioManager : MonoBehaviour
     public void PlayStepDimension()
     {
         if (clipStepDimension) audioSource.PlayOneShot(clipStepDimension);
+    }
+
+    public void PlayStartGame()
+    {
+        if (clipStartGame) audioSource.PlayOneShot(clipStartGame);
+    }
+
+    public void PlayStartLevel()
+    {
+        if (clipStartLevel) audioSource.PlayOneShot(clipStartLevel);
+    }
+
+    public void PlayEndGame()
+    {
+        if (clipEndGame) audioSource.PlayOneShot(clipEndGame);
     }
 }

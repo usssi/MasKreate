@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8934805679863306206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5738722400643470677}
+  - component: {fileID: 5183211903542907655}
+  m_Layer: 0
+  m_Name: AudioMAnager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5738722400643470677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934805679863306206}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1618.9435, y: 1456.4606, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5183211903542907655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934805679863306206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc08885401ec9844bb15394412ec834f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  clipSelect: {fileID: 8300000, guid: c81455f5961858c4ebce3dfb848bb531, type: 3}
+  clipDelete: {fileID: 8300000, guid: d7a16774b0893fc4cbb38938b1981333, type: 3}
+  clipStepRotation: {fileID: 8300000, guid: e9d1722447d7c7a48b4c047c6ebd7dbb, type: 3}
+  clipStepScale: {fileID: 8300000, guid: 9e22494a02b968449980e79601e520ea, type: 3}
+  clipStepMove: {fileID: 8300000, guid: 7c46e34e684a73d47b7066d2ed7614cf, type: 3}
+  clipStepDimension: {fileID: 8300000, guid: 0d3c3b63795a3504dbfb13e6592a4dcc, type: 3}
+  clipStartGame: {fileID: 8300000, guid: bff04b429f1f9f84fa0e043eb0f6f4bd, type: 3}
+  clipStartLevel: {fileID: 8300000, guid: 1304a386416810c46ac65261c8b07dca, type: 3}
+  clipEndGame: {fileID: 8300000, guid: da122257b0fe8294dad578dd10eeb600, type: 3}

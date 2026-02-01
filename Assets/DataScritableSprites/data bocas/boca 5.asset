@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: boca 5
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
   visual: {fileID: 21300000, guid: b76fb2d3389ce70448019f111fe009cc, type: 3}
-  itemName: boca
+  itemName: boca5

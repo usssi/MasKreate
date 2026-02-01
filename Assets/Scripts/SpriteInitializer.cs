@@ -29,6 +29,11 @@ public class SpriteInitializer : MonoBehaviour
         if (image == null) image = GetComponent<Image>();
         if (transformer == null) transformer = GetComponent<SpriteTransformer>();
 
+        // Ensure SpriteDataComponent is also populated for the save system
+        SpriteDataComponent dataComp = GetComponent<SpriteDataComponent>();
+        if (dataComp == null) dataComp = gameObject.AddComponent<SpriteDataComponent>();
+        dataComp.data = data;
+
         if (image != null && data.visual != null)
         {
             image.sprite = data.visual;

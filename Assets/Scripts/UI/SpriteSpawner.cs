@@ -6,8 +6,6 @@ public class SpriteSpawner : MonoBehaviour
     public GameObject spritePrefab;
     public SpriteData itemData;
     public Transform canvas;
-    public ObjectSelector selector;
-    public bool autoSelect = true;
 
     private void Awake()
     {
@@ -40,12 +38,6 @@ public class SpriteSpawner : MonoBehaviour
         if (transformer != null)
         {
             transformer.isInteractable = true;
-
-            // Auto-select if enabled
-            if (autoSelect && selector != null)
-            {
-                selector.SelectObject(transformer);
-            }
         }
     }
 }

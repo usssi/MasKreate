@@ -2,10 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-
 public class SpriteEditorUI : MonoBehaviour
 {
     [Header("UI References")]
@@ -16,6 +12,7 @@ public class SpriteEditorUI : MonoBehaviour
     public TextMeshProUGUI heightValueText;
     public TextMeshProUGUI scaleValueText;
     public TextMeshProUGUI rotationValueText;
+    public MaskSaveSystem saveSystem;
 
     [Header("Width Settings")]
     public float widthStep = 10f;
@@ -42,7 +39,12 @@ public class SpriteEditorUI : MonoBehaviour
 
     private void Start()
     {
-        // Sliders removed
+        // Auto-find SaveSystem if missing
+        if (saveSystem == null) 
+        {
+            saveSystem = FindFirstObjectByType<MaskSaveSystem>();
+            if (saveSystem != null) Debug.Log("SpriteEditorUI: Auto-found MaskSaveSystem in scene.");
+        }
     }
 
     public void SetTarget(SpriteTransformer target)
@@ -116,5 +118,41 @@ public class SpriteEditorUI : MonoBehaviour
         if (heightValueText) heightValueText.text = h.ToString("F0");
         if (scaleValueText) scaleValueText.text = s.ToString("F2");
         if (rotationValueText) rotationValueText.text = r.ToString("F0");
+    }
+
+    public void OnSaveButtonClicked()
+    {
+        Debug.Log($"SpriteEditorUI: Save button clicked on [{gameObject.name}]. Current reference: {(saveSystem != null ? "Assigned" : "NULL")}");
+        
+        // Final attempt to find it if it's still null
+        if (saveSystem == null)
+        {
+            // Try active first
+            saveSystem = Object.FindAnyObjectByType<MaskSaveSystem>();
+            if (saveSystem != null) 
+            {
+                Debug.Log($"SpriteEditorUI on [{gameObject.name}]: Emergency found MaskSaveSystem on [{saveSystem.gameObject.name}].");
+            }
+            else
+            {
+                // Try inactive as a desperate last resort
+                saveSystem = Object.FindAnyObjectByType<MaskSaveSystem>(FindObjectsInactive.Include);
+                if (saveSystem != null) Debug.LogWarning($"SpriteEditorUI on [{gameObject.name}]: Found MaskSaveSystem but it is INACTIVE!");
+            }
+        }
+
+        if (saveSystem != null) 
+        {
+            saveSystem.SaveDesign();
+        }
+        else
+        {
+            Debug.LogError($"SpriteEditorUI on [{gameObject.name}]: Cannot Save! MaskSaveSystem is truly missing from the scene.");
+        }
+    }
+
+    public void OnLoadButtonClicked()
+    {
+        if (saveSystem != null) saveSystem.LoadDesign();
     }
 }

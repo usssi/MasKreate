@@ -260,6 +260,9 @@ public class ObjectSelector : MonoBehaviour
                     Debug.Log($"[ObjectSelector] Deleting Selected Object: {obj.name}");
                     
                     // Clear selection 
+#if UNITY_EDITOR
+                    UnityEditor.Selection.activeGameObject = null;
+#endif
                     if (editorUI != null) editorUI.SetTarget(null);
                     if (selectionOutline != null) selectionOutline.SetTarget(null);
 

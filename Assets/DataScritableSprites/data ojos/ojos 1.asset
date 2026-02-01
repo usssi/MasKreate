@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ojos 1
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
   visual: {fileID: 21300000, guid: e3654780c5d287440b651f2a1dbe912b, type: 3}
-  itemName: ojos
+  itemName: ojos1

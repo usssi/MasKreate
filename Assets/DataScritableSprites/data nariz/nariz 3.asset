@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: nariz 3
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
   visual: {fileID: 21300000, guid: 03e980b2f9c52c44ab37be198f4d90f5, type: 3}
-  itemName: Nariz
+  itemName: Nariz3

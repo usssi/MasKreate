@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: misc 3
   m_EditorClassIdentifier: Assembly-CSharp::SpriteData
   visual: {fileID: 21300000, guid: a5c8510f51a1056478581d70e9a8865d, type: 3}
-  itemName: misc
+  itemName: misc3
