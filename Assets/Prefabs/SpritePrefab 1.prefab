@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8995671240465196549}
   - component: {fileID: 346390019562933371}
   m_Layer: 5
-  m_Name: SpritePrefab
+  m_Name: SpritePrefab 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 3635869813792869078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 739, y: 868}
+  m_SizeDelta: {x: 533, y: 174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2646512515233912167
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5c54365e0003eb8489470397b92d2701, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 864f1fced12f1894c87a84d718c7794e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
