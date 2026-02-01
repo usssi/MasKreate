@@ -3,13 +3,31 @@ using UnityEngine;
 public class SpriteSpawner : MonoBehaviour
 {
     public GameObject spritePrefab;
+    public SpriteData itemData;
     public Transform canvas;
+
+    private void Awake()
+    {
+        // Try to find data in children if not assigned
+        if (itemData == null)
+        {
+            var dataComp = GetComponentInChildren<SpriteDataComponent>();
+            if (dataComp != null) itemData = dataComp.data;
+        }
+    }
 
     public void SpawnSprite()
     {
         GameObject nuevoSprite = Instantiate(spritePrefab, canvas);
-        RectTransform rect = nuevoSprite.GetComponent<RectTransform>();
         
+        // Initialize with data
+        SpriteInitializer initializer = nuevoSprite.GetComponent<SpriteInitializer>();
+        if (initializer != null)
+        {
+            initializer.Initialize(itemData);
+        }
+
+        RectTransform rect = nuevoSprite.GetComponent<RectTransform>();
         nuevoSprite.transform.localPosition = Vector3.zero;
         rect.localScale = new Vector3(1f, 1f, 1f);
 
@@ -20,5 +38,4 @@ public class SpriteSpawner : MonoBehaviour
             transformer.isInteractable = true;
         }
     }
-
 }

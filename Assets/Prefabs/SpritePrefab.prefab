@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 415249436352144826}
   - component: {fileID: 8995671240465196549}
   - component: {fileID: 346390019562933371}
+  - component: {fileID: 3976835486503136771}
   m_Layer: 5
   m_Name: SpritePrefab
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5c54365e0003eb8489470397b92d2701, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd168ad42f126f343a1b873373944e0b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -108,3 +109,15 @@ MonoBehaviour:
   isInteractable: 1
   baseWidth: 0
   baseHeight: 0
+--- !u!114 &3976835486503136771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3635869813792869078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bade084864525c418c2a87bd6547c2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteInitializer

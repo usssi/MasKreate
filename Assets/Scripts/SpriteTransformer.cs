@@ -22,7 +22,12 @@ public class SpriteTransformer : MonoBehaviour
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        if (baseWidth == 0 || baseHeight == 0)
+        CaptureNativeSize();
+    }
+
+    public void CaptureNativeSize()
+    {
+        if (rectTransform != null)
         {
             baseWidth = rectTransform.sizeDelta.x;
             baseHeight = rectTransform.sizeDelta.y;
