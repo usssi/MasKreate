@@ -8,7 +8,6 @@ public class MaskPreview : MonoBehaviour
 
     public void Initialize(string filePath, MaskSaveSystem system)
     {
-        Debug.Log($"MaskPreview: Initializing with {filePath}");
         saveSystem = system;
         if (previewCanvas == null)
         {

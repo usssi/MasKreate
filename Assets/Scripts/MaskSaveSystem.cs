@@ -42,7 +42,6 @@ public class MaskSaveSystem : MonoBehaviour
         // Also save as "latest" for easy loading in editor if needed
         File.WriteAllText(DefaultSavePath, json);
         
-        Debug.Log($"Design saved to {fullPath}");
     }
 
     private string GetNextIncrementalName()
@@ -90,7 +89,6 @@ public class MaskSaveSystem : MonoBehaviour
                 Debug.LogWarning($"MaskSaveSystem: Skipping child {child.name}. Reason: Transformer={transformer != null}, DataComp={dataComp != null}, Data={(dataComp != null ? dataComp.data != null : "N/A")}");
             }
         }
-        Debug.Log($"MaskSaveSystem: Collected {collectedCount} elements from {childCount} children.");
         return designData;
     }
 
@@ -101,7 +99,6 @@ public class MaskSaveSystem : MonoBehaviour
 
     public void LoadDesignByPath(string path, Transform targetCanvas, bool isEditor = false)
     {
-        Debug.Log($"MaskSaveSystem: Attempting to load design from {path}");
         if (!File.Exists(path))
         {
             Debug.LogWarning($"MaskSaveSystem: No save file found at {path}");
@@ -132,7 +129,6 @@ public class MaskSaveSystem : MonoBehaviour
             Destroy(child.gameObject);
             clearedCount++;
         }
-        Debug.Log($"MaskSaveSystem: Cleared {clearedCount} existing children from target canvas.");
 
         string json = File.ReadAllText(path);
         MaskDesignData designData = JsonUtility.FromJson<MaskDesignData>(json);
@@ -143,7 +139,6 @@ public class MaskSaveSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"MaskSaveSystem: Found {designData.elements.Count} elements to load.");
 
         foreach (var elementData in designData.elements)
         {
@@ -187,7 +182,6 @@ public class MaskSaveSystem : MonoBehaviour
                 transformer.isInteractable = isEditor;
             }
         }
-        Debug.Log($"MaskSaveSystem: Finished loading design from {path}.");
     }
 
     private void PrepareEditorForLoad()
@@ -231,7 +225,6 @@ public class MaskSaveSystem : MonoBehaviour
             }
         }
 
-        Debug.Log($"MaskSaveSystem: Found {filtered.Count} valid incremental save files in {SavesFolder}");
         return filtered.ToArray();
     }
 }

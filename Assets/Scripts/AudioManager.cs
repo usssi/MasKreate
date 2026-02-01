@@ -4,6 +4,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
+    public AudioClip clipMusic;
     public AudioClip clipSelect;
     public AudioClip clipDelete;
     public AudioClip clipStepRotation;
@@ -14,7 +15,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip clipStartLevel;
     public AudioClip clipEndGame;
 
-    private AudioSource audioSource;
+    private AudioSource sfxSource;
+    private AudioSource musicSource;
 
     private void Awake()
     {
@@ -22,8 +24,20 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
+            
+            // Setup Sources
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.playOnAwake = false;
+
+            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.loop = true;
+            musicSource.playOnAwake = true;
+
+            if (clipMusic != null)
+            {
+                musicSource.clip = clipMusic;
+                musicSource.Play();
+            }
         }
         else
         {
@@ -33,46 +47,46 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySelect()
     {
-        if (clipSelect) audioSource.PlayOneShot(clipSelect);
+        if (clipSelect) sfxSource.PlayOneShot(clipSelect);
     }
 
     public void PlayDelete()
     {
-        if (clipDelete) audioSource.PlayOneShot(clipDelete);
+        if (clipDelete) sfxSource.PlayOneShot(clipDelete);
     }
 
     public void PlayStepRotation()
     {
-        if (clipStepRotation) audioSource.PlayOneShot(clipStepRotation);
+        if (clipStepRotation) sfxSource.PlayOneShot(clipStepRotation);
     }
 
     public void PlayStepScale()
     {
-        if (clipStepScale) audioSource.PlayOneShot(clipStepScale);
+        if (clipStepScale) sfxSource.PlayOneShot(clipStepScale);
     }
 
     public void PlayStepMove()
     {
-        if (clipStepMove) audioSource.PlayOneShot(clipStepMove);
+        if (clipStepMove) sfxSource.PlayOneShot(clipStepMove);
     }
 
     public void PlayStepDimension()
     {
-        if (clipStepDimension) audioSource.PlayOneShot(clipStepDimension);
+        if (clipStepDimension) sfxSource.PlayOneShot(clipStepDimension);
     }
 
     public void PlayStartGame()
     {
-        if (clipStartGame) audioSource.PlayOneShot(clipStartGame);
+        if (clipStartGame) sfxSource.PlayOneShot(clipStartGame);
     }
 
     public void PlayStartLevel()
     {
-        if (clipStartLevel) audioSource.PlayOneShot(clipStartLevel);
+        if (clipStartLevel) sfxSource.PlayOneShot(clipStartLevel);
     }
 
     public void PlayEndGame()
     {
-        if (clipEndGame) audioSource.PlayOneShot(clipEndGame);
+        if (clipEndGame) sfxSource.PlayOneShot(clipEndGame);
     }
 }

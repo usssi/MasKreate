@@ -6,6 +6,7 @@ public class SpriteSpawner : MonoBehaviour
     public GameObject spritePrefab;
     public SpriteData itemData;
     public Transform canvas;
+    public ObjectSelector objectSelector;
 
     private void Awake()
     {
@@ -14,6 +15,12 @@ public class SpriteSpawner : MonoBehaviour
         {
             var dataComp = GetComponentInChildren<SpriteDataComponent>();
             if (dataComp != null) itemData = dataComp.data;
+        }
+
+        // Try to find ObjectSelector in scene if not assigned
+        if (objectSelector == null)
+        {
+            objectSelector = FindAnyObjectByType<ObjectSelector>();
         }
     }
 
@@ -38,6 +45,12 @@ public class SpriteSpawner : MonoBehaviour
         if (transformer != null)
         {
             transformer.isInteractable = true;
+            
+            // Auto-select the newly spawned object
+            if (objectSelector != null)
+            {
+                objectSelector.SelectObject(transformer);
+            }
         }
     }
 }

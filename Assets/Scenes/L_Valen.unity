@@ -558,9 +558,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1371194096}
+      - m_Target: {fileID: 693365056}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: 
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13519,11 +13519,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5738722400643470677, guid: 0b92e67f2b945d946a30a8cc2c1d6d42, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1618.9435
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738722400643470677, guid: 0b92e67f2b945d946a30a8cc2c1d6d42, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1456.4606
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738722400643470677, guid: 0b92e67f2b945d946a30a8cc2c1d6d42, type: 3}
       propertyPath: m_LocalPosition.z

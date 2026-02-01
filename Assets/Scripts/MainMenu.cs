@@ -20,8 +20,6 @@ public class MainMenu : MonoBehaviour
 
     public void PopulateGallery()
     {
-        // Only run if we are the "active" instance (prevents double execution if you have multiple MainMenu scripts)
-        Debug.Log($"MainMenu: Starting PopulateGallery on {gameObject.name}...");
         
         if (saveSystem == null) 
         {
@@ -45,14 +43,11 @@ public class MainMenu : MonoBehaviour
             Destroy(child.gameObject);
             clearedCount++;
         }
-        Debug.Log($"MainMenu: Cleared {clearedCount} old previews.");
 
         string[] saveFiles = saveSystem.GetAllSaveFiles();
-        Debug.Log($"MainMenu: Found {saveFiles.Length} files to display.");
 
         foreach (string file in saveFiles)
         {
-            Debug.Log($"MainMenu: Instantiating preview for {file}");
             GameObject previewObj = Instantiate(previewPrefab, galleryContainer);
             MaskPreview preview = previewObj.GetComponent<MaskPreview>();
             if (preview != null)
@@ -64,7 +59,6 @@ public class MainMenu : MonoBehaviour
                 Debug.LogError("MainMenu: Instantiated preview prefab is missing MaskPreview component!");
             }
         }
-        Debug.Log("MainMenu: Gallery population complete.");
     }
 
    public void Play()

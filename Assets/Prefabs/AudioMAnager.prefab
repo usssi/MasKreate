@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc08885401ec9844bb15394412ec834f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  clipMusic: {fileID: 8300000, guid: 204ec7bdd27285b478266de73953f40c, type: 3}
   clipSelect: {fileID: 8300000, guid: c81455f5961858c4ebce3dfb848bb531, type: 3}
   clipDelete: {fileID: 8300000, guid: d7a16774b0893fc4cbb38938b1981333, type: 3}
   clipStepRotation: {fileID: 8300000, guid: e9d1722447d7c7a48b4c047c6ebd7dbb, type: 3}

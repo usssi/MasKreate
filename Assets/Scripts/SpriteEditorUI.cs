@@ -43,7 +43,6 @@ public class SpriteEditorUI : MonoBehaviour
         if (saveSystem == null) 
         {
             saveSystem = FindFirstObjectByType<MaskSaveSystem>();
-            if (saveSystem != null) Debug.Log("SpriteEditorUI: Auto-found MaskSaveSystem in scene.");
         }
     }
 
@@ -122,18 +121,13 @@ public class SpriteEditorUI : MonoBehaviour
 
     public void OnSaveButtonClicked()
     {
-        Debug.Log($"SpriteEditorUI: Save button clicked on [{gameObject.name}]. Current reference: {(saveSystem != null ? "Assigned" : "NULL")}");
         
         // Final attempt to find it if it's still null
         if (saveSystem == null)
         {
             // Try active first
             saveSystem = Object.FindAnyObjectByType<MaskSaveSystem>();
-            if (saveSystem != null) 
-            {
-                Debug.Log($"SpriteEditorUI on [{gameObject.name}]: Emergency found MaskSaveSystem on [{saveSystem.gameObject.name}].");
-            }
-            else
+            if (saveSystem == null)
             {
                 // Try inactive as a desperate last resort
                 saveSystem = Object.FindAnyObjectByType<MaskSaveSystem>(FindObjectsInactive.Include);
