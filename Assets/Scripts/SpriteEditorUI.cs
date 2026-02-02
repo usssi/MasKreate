@@ -137,7 +137,10 @@ public class SpriteEditorUI : MonoBehaviour
 
         if (saveSystem != null) 
         {
-            saveSystem.SaveDesign();
+            if (saveSystem.SaveDesign())
+            {
+                if (AudioManager.Instance != null) AudioManager.Instance.PlaySave();
+            }
         }
         else
         {

@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip clipStartGame;
     public AudioClip clipStartLevel;
     public AudioClip clipEndGame;
+    public AudioClip clipSave;
 
     private AudioSource sfxSource;
     private AudioSource musicSource;
@@ -88,5 +89,10 @@ public class AudioManager : MonoBehaviour
     public void PlayEndGame()
     {
         if (clipEndGame) sfxSource.PlayOneShot(clipEndGame);
+    }
+
+    public void PlaySave()
+    {
+        if (clipSave) sfxSource.PlayOneShot(clipSave);
     }
 }

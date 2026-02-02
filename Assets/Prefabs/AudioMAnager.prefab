@@ -54,3 +54,4 @@ MonoBehaviour:
   clipStartGame: {fileID: 8300000, guid: bff04b429f1f9f84fa0e043eb0f6f4bd, type: 3}
   clipStartLevel: {fileID: 8300000, guid: 1304a386416810c46ac65261c8b07dca, type: 3}
   clipEndGame: {fileID: 8300000, guid: da122257b0fe8294dad578dd10eeb600, type: 3}
+  clipSave: {fileID: 8300000, guid: 5978c1cbda117014a8d4caf4b995e670, type: 3}

@@ -22,12 +22,12 @@ public class MaskSaveSystem : MonoBehaviour
         }
     }
 
-    public void SaveDesign()
+    public bool SaveDesign()
     {
         if (bgCanvas == null) 
         {
             Debug.LogError("MaskSaveSystem: Cannot Save! bgCanvas is not assigned. This is normal in Main Menu, but an error in the Mask Editor scene.");
-            return;
+            return false;
         }
 
         // Find next incremental name
@@ -35,6 +35,13 @@ public class MaskSaveSystem : MonoBehaviour
         string fullPath = Path.Combine(SavesFolder, fileName);
 
         MaskDesignData designData = CollectDesignData();
+        
+        // Prevent saving empty masks
+        if (designData.elements == null || designData.elements.Count == 0)
+        {
+            Debug.LogWarning("MaskSaveSystem: Design is empty! Aborting save.");
+            return false;
+        }
 
         string json = JsonUtility.ToJson(designData, true);
         File.WriteAllText(fullPath, json);
@@ -42,6 +49,7 @@ public class MaskSaveSystem : MonoBehaviour
         // Also save as "latest" for easy loading in editor if needed
         File.WriteAllText(DefaultSavePath, json);
         
+        return true;
     }
 
     private string GetNextIncrementalName()
